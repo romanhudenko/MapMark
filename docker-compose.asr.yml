@@ -1,0 +1,9 @@
+version: "3.4"
+
+services:
+  whisper-asr-webservice:
+    image: onerahmet/openai-whisper-asr-webservice:latest
+    environment:
+      - ASR_MODEL=base
+    ports:
+      - "9000:9000"
