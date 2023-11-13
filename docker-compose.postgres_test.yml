@@ -1,0 +1,14 @@
+version: '3.8'
+services:
+  db:
+    image: postgres:latest
+    container_name: mapmark_test
+    restart: always
+    environment:
+      - POSTGRES_USER=mapmark
+      - POSTGRES_PASSWORD=mapmark_password
+      - POSTGRES_DB=mapmark
+    volumes:
+      - ./data_test:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
