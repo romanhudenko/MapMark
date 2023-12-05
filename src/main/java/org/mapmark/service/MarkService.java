@@ -1,43 +1,51 @@
 package org.mapmark.service;
 
+import org.mapmark.dto.MarkBasicDTO;
 import org.mapmark.model.MarkBasic;
+import org.mapmark.repo.MarkRepository;
+import org.mapmark.util.GlobalExceptionHandler;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.time.LocalDateTime;
+import java.util.*;
 
 @Service
 public class MarkService {
 
-    private Map<String, MarkBasic> db = new HashMap<>() {{
-        put("1", new MarkBasic("1", "test"));
-    }};
 
 
-    public Collection<MarkBasic> get() {
-        return db.values();
+    private final MarkRepository markRepository;
+
+    public MarkService(MarkRepository markRepository) {
+        this.markRepository = markRepository;
+    }
+
+    public Iterable<MarkBasic> get() {
+        return markRepository.findAll();
     }
 
     public MarkBasic get(String id) {
-        return db.get(id);
+        return markRepository.findById(id).orElse(null);
     }
 
-    public MarkBasic remove(String id) {
-        return db.remove(id);
-
+    public void remove(String id) {
+        markRepository.deleteById(id);
     }
 
-    public MarkBasic save(String name) {
+    public MarkBasic save(MarkBasicDTO markBasic) {
 
-        String uuid = UUID.randomUUID().toString();
-        MarkBasic markBasic = new MarkBasic();
-        markBasic.setId(uuid);
-        markBasic.setName(name);
 
-        db.put(uuid, markBasic);
-        return markBasic;
+        MarkBasic mark = MarkBasic.builder()
+                .name(markBasic.getName())
+                .latitude(markBasic.getLatitude())
+                .longitude(markBasic.getLongitude())
+                .userId(1)
+                .groupId(markBasic.getGroupId())
+                .colorHex(markBasic.getColorHex())
+                .timestamp(LocalDateTime.now()).build();
+
+        return markRepository.save(mark);
 
     }
 }

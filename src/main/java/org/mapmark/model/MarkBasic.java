@@ -1,30 +1,34 @@
 package org.mapmark.model;
 
-import jakarta.validation.constraints.NotEmpty;
-import lombok.Data;
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
+import lombok.*;
+
+import java.time.LocalDateTime;
 
 
-@Data
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Entity
 public class MarkBasic {
 
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String Id;
-    @NotEmpty
     private String name;
+    private double latitude;
+    private double longitude;
+    private int userId;
+    private String colorHex;
+    private int groupId;
 
-    /**
-     * latitude
-     * longitude
-     * user id
-     * color
-     * group
-     **/
+    @Basic(optional = false)
+    @Column(columnDefinition = "TIMESTAMP WITH TIME ZONE")
+    private LocalDateTime timestamp;
 
-    public MarkBasic() {
-    }
-
-    public MarkBasic(String Id, String name) {
-        this.Id = Id;
-        this.name = name;
-    }
 }

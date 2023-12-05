@@ -2,9 +2,13 @@ package org.mapmark.web;
 
 
 import jakarta.validation.Valid;
+import org.mapmark.dto.MarkBasicDTO;
 import org.mapmark.model.MarkBasic;
 import org.mapmark.service.MarkService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -12,7 +16,6 @@ import java.util.Collection;
 
 @RestController
 public class MarkController {
-
 
     private final MarkService markService;
 
@@ -28,7 +31,7 @@ public class MarkController {
 
 
     @GetMapping("/markbasic")
-    public Collection<MarkBasic> getMarkBasic() {
+    public Iterable<MarkBasic> getMarkBasic() {
         return markService.get();
     }
 
@@ -41,14 +44,13 @@ public class MarkController {
 
     @DeleteMapping("/markbasic/{id}")
     public void deleteMarkBasic(@PathVariable String id) {
-        MarkBasic mark = markService.remove(id);
-        if (mark == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        markService.remove(id);
     }
 
     @PostMapping("/markbasic")
-    public MarkBasic addMarkBasic(@RequestBody @Valid MarkBasic mark) {
+    public ResponseEntity<MarkBasic> addMarkBasic(@RequestBody @Valid MarkBasicDTO mark) {
 
-        return markService.save(mark.getName());
+        return new ResponseEntity<>(markService.save(mark), HttpStatus.CREATED);
 
     }
 
