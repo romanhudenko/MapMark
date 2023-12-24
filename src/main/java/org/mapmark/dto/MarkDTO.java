@@ -7,7 +7,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class MarkBasicDTO {
+public class MarkDTO {
 
 
     @NotBlank(message = "Invalid Name: Empty name")
@@ -22,9 +22,8 @@ public class MarkBasicDTO {
     @DecimalMin(value = "-180.000000", message = "Please Enter a valid Longitude")
     private double longitude;
 
-    @Size(min = 6, max = 6, message = "Wrong HEX size")
+    @Size(min = 6, max = 6, message = "Wrong HEX code")
     @Pattern(regexp = "^[0-9a-fA-F]+$", message = "Wrong HEX pattern")
     private String colorHex;
 
-    private int groupId;
 }
