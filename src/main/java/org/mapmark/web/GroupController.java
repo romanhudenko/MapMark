@@ -13,7 +13,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 
 @RestController
-@RequestMapping("group")
+@RequestMapping("/api/group")
 public class GroupController {
 
     private final GroupService groupService;
@@ -31,7 +31,7 @@ public class GroupController {
 
     @GetMapping
     public ResponseEntity<List<Group>> getGroups() {
-        return new ResponseEntity<>(groupService.get(), HttpStatus.OK);
+        return new ResponseEntity<>(groupService.getGroups(), HttpStatus.OK);
     }
 
     /**
@@ -42,8 +42,8 @@ public class GroupController {
      */
     @GetMapping("/{id}")
     public ResponseEntity<Group> getGroup(@PathVariable Long id) {
-        Group group = groupService.get(id);
-        if (group == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        Group group = groupService.getGroupById(id);
+        if (group == null) throw new ResponseStatusException(HttpStatus.NO_CONTENT);
         return new ResponseEntity<>(group, HttpStatus.OK);
     }
 
@@ -56,10 +56,9 @@ public class GroupController {
     @GetMapping("/name/{name}")
     public ResponseEntity<List<Group>> getGroupByName(@PathVariable String name) {
         List<Group> group = groupService.getGroupsByName(name);
-        if (group == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        if (group == null) throw new ResponseStatusException(HttpStatus.NO_CONTENT);
         return new ResponseEntity<>(group, HttpStatus.OK);
     }
-
 
     /**
      * Get all groups by mark uuid
@@ -82,8 +81,7 @@ public class GroupController {
      * @return status
      */
     @PostMapping
-    public ResponseEntity<Group> addGroup(@RequestBody @Valid GroupDTO groupDTO) {
-
+    public ResponseEntity<Group> createGroup(@RequestBody @Valid GroupDTO groupDTO) {
         return new ResponseEntity<>(groupService.save(groupDTO), HttpStatus.CREATED);
 
     }
@@ -98,9 +96,8 @@ public class GroupController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Group> updateGroup(@PathVariable Long id, @RequestBody @Valid GroupDTO groupDTO) {
-
         Group group = groupService.update(id, groupDTO);
-        if (group == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        if (group == null) throw new ResponseStatusException(HttpStatus.NO_CONTENT);
         return new ResponseEntity<>(group, HttpStatus.OK);
 
     }

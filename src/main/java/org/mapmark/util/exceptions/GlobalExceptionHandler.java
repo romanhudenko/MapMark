@@ -1,4 +1,4 @@
-package org.mapmark.util;
+package org.mapmark.util.exceptions;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

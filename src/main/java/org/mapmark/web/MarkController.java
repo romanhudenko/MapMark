@@ -4,6 +4,7 @@ package org.mapmark.web;
 import jakarta.validation.Valid;
 import org.mapmark.dto.MarkDTO;
 import org.mapmark.model.Mark;
+import org.mapmark.security.service.UserDetailsImpl;
 import org.mapmark.service.MarkService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +14,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 
 @RestController
-@RequestMapping("mark")
+@RequestMapping("/api/mark")
 public class MarkController {
 
     private final MarkService markService;
@@ -30,7 +31,7 @@ public class MarkController {
      */
     @GetMapping
     public ResponseEntity<List<Mark>> getMarks() {
-        return new ResponseEntity<>(markService.get(), HttpStatus.OK);
+        return new ResponseEntity<>(markService.getMarks(), HttpStatus.OK);
     }
 
     /**
@@ -42,8 +43,9 @@ public class MarkController {
 
     @GetMapping("/{uuid}")
     public ResponseEntity<Mark> getMarkById(@PathVariable String uuid) {
-        Mark mark = markService.get(uuid);
-        if (mark == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        Mark mark = markService.getMarkByUUID(uuid);
+        //todo add handler
+        if (mark == null) throw new ResponseStatusException(HttpStatus.NO_CONTENT);
         return new ResponseEntity<>(mark, HttpStatus.OK);
     }
 
@@ -57,7 +59,8 @@ public class MarkController {
     @GetMapping("/name/{name}")
     public ResponseEntity<List<Mark>> getMarkByName(@PathVariable String name) {
         List<Mark> mark = markService.getByName(name);
-        if (mark == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        //todo add handler
+        if (mark == null) throw new ResponseStatusException(HttpStatus.NO_CONTENT);
         return new ResponseEntity<>(mark, HttpStatus.OK);
     }
 
@@ -71,10 +74,9 @@ public class MarkController {
     @GetMapping("/group/{groupId}")
     public ResponseEntity<List<Mark>> getMarksInGroup(@PathVariable Long groupId) {
         List<Mark> mark = markService.getMarksInGroup(groupId);
-        if (mark == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        if (mark == null) throw new ResponseStatusException(HttpStatus.NO_CONTENT);
         return new ResponseEntity<>(mark, HttpStatus.OK);
     }
-
 
     /**
      * Create new mark
@@ -91,21 +93,24 @@ public class MarkController {
 
     /**
      * Edit mark
-     * @param uuid mark ID
+     *
+     * @param uuid    mark ID
      * @param markDTO new data
      * @return edited mark entity
      */
     @PutMapping("/{uuid}")
-    public ResponseEntity<Mark> updateMark(@PathVariable String uuid, @RequestBody @Valid MarkDTO markDTO) {
+    public ResponseEntity<Mark> updateMark(@PathVariable String uuid, @Valid @RequestBody MarkDTO markDTO) {
 
         Mark mark = markService.update(uuid, markDTO);
-        if (mark == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        //todo add handler
+        if (mark == null) throw new ResponseStatusException(HttpStatus.NO_CONTENT);
         return new ResponseEntity<>(mark, HttpStatus.OK);
 
     }
 
     /**
      * Delete mark by UUID
+     *
      * @param id mark uuid
      */
 

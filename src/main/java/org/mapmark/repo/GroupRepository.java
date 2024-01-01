@@ -1,7 +1,6 @@
 package org.mapmark.repo;
 
 import org.mapmark.model.Group;
-import org.mapmark.model.Mark;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -9,7 +8,13 @@ import java.util.List;
 
 public interface GroupRepository extends JpaRepository<Group, Long> {
 
-    List<Group> findGroupsByMarksId(String markId);
 
-    List<Group> findByNameContaining(String name);
+    Group findByIdAndUser_Username(Long id, String username);
+
+    List<Group> findByUser_Username(String username);
+
+    List<Group> findGroupsByMarksIdAndUser_Username(String markId,String username);
+
+    List<Group> findByNameContainingAndUser_Username(String name, String username);
+
 }

@@ -2,7 +2,11 @@ package org.mapmark.service;
 
 import org.mapmark.dto.MarkDTO;
 import org.mapmark.model.Mark;
+import org.mapmark.model.User;
 import org.mapmark.repo.MarkRepository;
+import org.mapmark.repo.UserRepository;
+import org.mapmark.security.config.AuthFacadeImpl;
+import org.mapmark.security.service.UserDetailsImpl;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -11,36 +15,42 @@ import java.util.List;
 @Service
 public class MarkService {
 
-
+    private final AuthFacadeImpl authFacade;
     private final MarkRepository markRepository;
 
-    public MarkService(MarkRepository markRepository) {
+    public MarkService(AuthFacadeImpl authFacade, MarkRepository markRepository) {
+        this.authFacade = authFacade;
         this.markRepository = markRepository;
     }
 
-    public List<Mark> get() {
-        return markRepository.findAll();
+    public List<Mark> getMarks() {
+        return markRepository.findByUser_Username(authFacade.getUsername());
     }
 
-    public Mark get(String id) {
-        return markRepository.findById(id).orElse(null);
+    public Mark getMarkByUUID(String id) {
+
+        return markRepository.findByIdAndUser_Username(id, authFacade.getUsername());
     }
 
 
     public List<Mark> getByName(String Name) {
-        return markRepository.findByNameContaining(Name);
+        return markRepository.findByNameContainingAndUser_Username(Name, authFacade.getUsername());
     }
+
 
     public List<Mark> getMarksInGroup(Long groupId) {
-        return markRepository.findMarksByGroupsId(groupId);
+        return markRepository.findMarksByGroupsIdAndUser_Username(groupId, authFacade.getUsername());
     }
+
 
     public void remove(String id) {
-        markRepository.deleteById(id);
+        if (markRepository.findByIdAndUser_Username(id, authFacade.getUsername()) != null) {
+            markRepository.deleteById(id);
+        }
     }
 
-    public Mark save(MarkDTO markDTO) {
 
+    public Mark save(MarkDTO markDTO) {
 
         LocalDateTime timestamp = LocalDateTime.now();
 
@@ -48,7 +58,7 @@ public class MarkService {
                 .name(markDTO.getName())
                 .latitude(markDTO.getLatitude())
                 .longitude(markDTO.getLongitude())
-                .userId(1)
+                .user(authFacade.getAuthenticatedUserEntity())
                 .colorHex(markDTO.getColorHex())
                 .CreateTimestamp(timestamp)
                 .UpdateTimestamp(timestamp)
@@ -61,16 +71,24 @@ public class MarkService {
 
     public Mark update(String id, MarkDTO markDTO) {
 
-        Mark mark = markRepository.findById(id).orElse(null);
+        Mark mark = markRepository.findByIdAndUser_Username(id, authFacade.getUsername());
 
         if (mark == null) {
             return null;
         }
+        if (!markDTO.getName().isBlank()) {
+            mark.setName(markDTO.getName());
+        }
+        if (markDTO.getLatitude() != 0 && mark.getLatitude() != markDTO.getLatitude()) {
+            mark.setLatitude(markDTO.getLatitude());
+        }
+        if (markDTO.getLongitude() != 0 && mark.getLongitude() != markDTO.getLongitude()) {
+            mark.setLongitude(markDTO.getLongitude());
+        }
+        if (!markDTO.getColorHex().isBlank()) {
+            mark.setColorHex(markDTO.getColorHex());
+        }
 
-        mark.setName(markDTO.getName());
-        mark.setLatitude(markDTO.getLatitude());
-        mark.setLongitude(markDTO.getLongitude());
-        mark.setColorHex(markDTO.getColorHex());
         mark.setUpdateTimestamp(LocalDateTime.now());
 
         return markRepository.save(mark);

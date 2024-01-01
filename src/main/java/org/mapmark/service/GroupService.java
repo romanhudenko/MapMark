@@ -3,6 +3,7 @@ package org.mapmark.service;
 import org.mapmark.dto.GroupDTO;
 import org.mapmark.model.Group;
 import org.mapmark.repo.GroupRepository;
+import org.mapmark.security.config.AuthFacadeImpl;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -11,49 +12,53 @@ import java.util.List;
 @Service
 public class GroupService {
 
-
+    private final AuthFacadeImpl authFacade;
     private final GroupRepository groupRepository;
 
-    public GroupService(GroupRepository groupRepository) {
+    public GroupService(AuthFacadeImpl authFacade, GroupRepository groupRepository) {
+        this.authFacade = authFacade;
         this.groupRepository = groupRepository;
     }
 
-    public List<Group> get() {
-        return groupRepository.findAll();
+
+    public List<Group> getGroups() {
+        return groupRepository.findByUser_Username(authFacade.getUsername());
+    }
+
+
+    public Group getGroupById(Long id) {
+        return groupRepository.findByIdAndUser_Username(id, authFacade.getUsername());
+    }
+
+    public List<Group> getGroupsByName(String name) {
+        return groupRepository.findByNameContainingAndUser_Username(name, authFacade.getUsername());
     }
 
 
     public List<Group> getGroupsByMarkId(String markId) {
-        return groupRepository.findGroupsByMarksId(markId);
-    }
-
-    public Group get(Long id) {
-        return groupRepository.findById(id).orElse(null);
-    }
-
-    public List<Group> getGroupsByName(String name) {
-        return groupRepository.findByNameContaining(name);
+        return groupRepository.findGroupsByMarksIdAndUser_Username(markId, authFacade.getUsername());
     }
 
 
     public void remove(Long id) {
-        groupRepository.deleteById(id);
+        Group group = groupRepository.findByIdAndUser_Username(id, authFacade.getUsername());
+        if (group != null) groupRepository.deleteById(id);
+
     }
 
     public Group save(GroupDTO groupDTO) {
 
-
         LocalDateTime timestamp = LocalDateTime.now();
 
-        String desc = groupDTO.getDescription() == null ? "" : groupDTO.getDescription();
+        String desc = groupDTO.getDescription().isBlank() ? "" : groupDTO.getDescription();
         //fixme tmp ico
         byte[] a = {33};
 
         Group group = Group.builder()
                 .name(groupDTO.getName())
                 .description(desc)
-//                .userId(1)
-//                .icon(groupOfMarksDTO.getIco().getBytes())
+                .user(authFacade.getAuthenticatedUserEntity())
+                //fixme default icon
                 .icon(a)
                 .CreateTimestamp(timestamp)
                 .UpdateTimestamp(timestamp)
@@ -65,16 +70,22 @@ public class GroupService {
 
     public Group update(Long id, GroupDTO groupDTO) {
 
-        Group group = groupRepository.findById(id).orElse(null);
+        Group group = groupRepository.findByIdAndUser_Username(id, authFacade.getUsername());
         if (group == null) return null;
 
-        String desc = groupDTO.getDescription() == null ? "" : groupDTO.getDescription();
-        //fixme tmp ico
-        byte[] a = {33};
+        if (!groupDTO.getName().isBlank()) {
+            group.setName(groupDTO.getName());
+        }
 
-        group.setName(groupDTO.getName());
-        group.setDescription(desc);
+        if (!groupDTO.getDescription().isBlank()) {
+            group.setDescription(groupDTO.getDescription());
+        }
+
+        //fixme default icon
+        byte[] a = {33};
         group.setIcon(a);
+
+
         group.setUpdateTimestamp(LocalDateTime.now());
 
         return groupRepository.save(group);

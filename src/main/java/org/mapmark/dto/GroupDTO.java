@@ -17,7 +17,7 @@ public class GroupDTO {
     private String description;
 
 
-    private String ico;
+    private String icon;
 
 
 }

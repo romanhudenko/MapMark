@@ -1,6 +1,9 @@
 package org.mapmark.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -25,7 +28,14 @@ public class Mark {
     private String name;
     private double latitude;
     private double longitude;
-    private int userId;
+
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    @JsonIgnore
+    private User user;
+
+
     private String colorHex;
 
     @Basic(optional = false)
@@ -45,6 +55,8 @@ public class Mark {
     @JoinTable(name="mark_group",
             joinColumns=  @JoinColumn(name="mark_id", referencedColumnName="id"),
             inverseJoinColumns= @JoinColumn(name="group_id", referencedColumnName="id") )
+    @JsonIgnore
+
     private Set<Group> groups = new HashSet<>();
 
 

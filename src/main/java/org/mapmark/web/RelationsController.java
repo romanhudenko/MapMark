@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 @RestController
+@RequestMapping("/api/rel")
 public class RelationsController {
 
     private final RelationService relationService;
@@ -38,8 +39,6 @@ public class RelationsController {
         return new ResponseEntity<>("Saved", HttpStatus.CREATED);
 
     }
-
-
 
 
 }
