@@ -24,6 +24,10 @@ public class MarkService {
     }
 
     public List<Mark> getMarks() {
+
+        System.out.println(authFacade.getUsername());
+
+
         return markRepository.findByUser_Username(authFacade.getUsername());
     }
 

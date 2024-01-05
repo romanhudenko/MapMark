@@ -1,5 +1,6 @@
 package org.mapmark.security.config;
 
+import org.mapmark.dto.LoginDTO;
 import org.mapmark.model.User;
 import org.mapmark.repo.UserRepository;
 import org.mapmark.security.service.UserDetailsImpl;
@@ -30,5 +31,12 @@ public class AuthFacadeImpl implements AuthFacade {
         UserDetailsImpl user = (UserDetailsImpl) getAuthentication().getPrincipal();
         return userRepository.findById(user.getId()).orElse(null);
     }
+
+
+//    public void login(LoginDTO loginDTO) {
+//        Authentication authentication = authenticationManager
+//                .authenticate(new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword()));
+//
+//    }
 
 }

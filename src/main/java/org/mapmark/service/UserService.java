@@ -1,12 +1,21 @@
 package org.mapmark.service;
 
-import jakarta.annotation.Nullable;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.mapmark.dto.LoginDTO;
 import org.mapmark.dto.UserDTO;
 import org.mapmark.model.Role;
 import org.mapmark.model.User;
 import org.mapmark.repo.RoleRepository;
 import org.mapmark.repo.UserRepository;
+import org.mapmark.security.config.AuthFacadeImpl;
+import org.mapmark.util.exceptions.UserAlreadyExistException;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,22 +24,36 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
-    public final PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
+//    private final RememberMeServices rememberMeServices;
 
-    public UserService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
+    private final AuthFacadeImpl authFacade;
+
+
+    public UserService(UserRepository userRepository,
+                       RoleRepository roleRepository,
+                       PasswordEncoder passwordEncoder,
+                       AuthenticationManager authenticationManager,
+                       RememberMeServices rememberMeServices,
+                       AuthFacadeImpl authFacade) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
+        this.authenticationManager = authenticationManager;
+//        this.rememberMeServices = rememberMeServices;
+        this.authFacade = authFacade;
     }
 
     public User createNewUser(UserDTO userDTO) {
         Role role = roleRepository.findByName("ROLE_USER").orElse(null);
 
-        boolean emailExist = userRepository.existsByEmail(userDTO.getEmail());
-        if (emailExist) return null;    //FIXME EMAIL ALREADY EXIST
-
         boolean usernameExist = userRepository.existsByUsername(userDTO.getUsername());
-        if (usernameExist) return null; //FIXME USERNAME IS TAKEN
+        if (usernameExist) throw new UserAlreadyExistException("Username already taken");
+
+        boolean emailExist = userRepository.existsByEmail(userDTO.getEmail());
+        if (emailExist) throw new UserAlreadyExistException("Email already taken");
+
 
         User user = User.builder()
                 .email(userDTO.getEmail())
@@ -38,10 +61,9 @@ public class UserService {
                 .password(passwordEncoder.encode(userDTO.getPassword()))
                 .build();
 
-        user = userRepository.save(user); //save user in DB -> get user id
-        user.addRole(role); //default ROLE_USER role
-        user = userRepository.save(user); //update user role -> userId = roleId
-
+        user = userRepository.save(user);
+        user.addRole(role);
+        user = userRepository.save(user);
         return user;
     }
 
@@ -85,6 +107,12 @@ public class UserService {
 
     public User getUserById(Long id) {
         return userRepository.findById(id).orElse(null);
+
+    }
+
+
+    public String getAuthenticatedUsername() {
+        return authFacade.getUsername();
 
     }
 }

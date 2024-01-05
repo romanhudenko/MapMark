@@ -71,7 +71,7 @@ public class MarkController {
      * @return Array of marks in this group
      */
 
-    @GetMapping("/group/{groupId}")
+    @GetMapping("/in/{groupId}")
     public ResponseEntity<List<Mark>> getMarksInGroup(@PathVariable Long groupId) {
         List<Mark> mark = markService.getMarksInGroup(groupId);
         if (mark == null) throw new ResponseStatusException(HttpStatus.NO_CONTENT);

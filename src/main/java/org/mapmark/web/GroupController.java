@@ -63,12 +63,12 @@ public class GroupController {
     /**
      * Get all groups by mark uuid
      *
-     * @param id mark UUID
+     * @param markId mark UUID
      * @return Array of group entity
      */
-    @GetMapping("/mark/{id}")
-    public ResponseEntity<List<Group>> getGroupsByMarkId(@PathVariable String id) {
-        List<Group> group = groupService.getGroupsByMarkId(id);
+    @GetMapping("/in/{markId}")
+    public ResponseEntity<List<Group>> getGroupsByMarkId(@PathVariable String markId) {
+        List<Group> group = groupService.getGroupsByMarkId(markId);
         if (group == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         return new ResponseEntity<>(group, HttpStatus.OK);
     }
