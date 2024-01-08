@@ -7,6 +7,7 @@ import org.mapmark.repo.MarkRepository;
 import org.mapmark.repo.UserRepository;
 import org.mapmark.security.config.AuthFacadeImpl;
 import org.mapmark.security.service.UserDetailsImpl;
+import org.mapmark.util.exceptions.DataNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -24,16 +25,15 @@ public class MarkService {
     }
 
     public List<Mark> getMarks() {
-
-        System.out.println(authFacade.getUsername());
-
-
         return markRepository.findByUser_Username(authFacade.getUsername());
     }
 
     public Mark getMarkByUUID(String id) {
-
-        return markRepository.findByIdAndUser_Username(id, authFacade.getUsername());
+        Mark mark = markRepository.findByIdAndUser_Username(id, authFacade.getUsername());
+        if (mark == null) {
+            throw new DataNotFoundException("Mark with id " + id + " not found");
+        }
+        return mark;
     }
 
 
@@ -78,7 +78,7 @@ public class MarkService {
         Mark mark = markRepository.findByIdAndUser_Username(id, authFacade.getUsername());
 
         if (mark == null) {
-            return null;
+            throw new DataNotFoundException("Mark with id " + id + " not found");
         }
         if (!markDTO.getName().isBlank()) {
             mark.setName(markDTO.getName());

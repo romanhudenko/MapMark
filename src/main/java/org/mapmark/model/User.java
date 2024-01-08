@@ -31,6 +31,10 @@ public class User {
     @JsonIgnore
     private String password;
 
+
+    //todo add registration date, add isActive column
+
+
     @Builder.Default
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles",

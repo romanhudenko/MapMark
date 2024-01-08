@@ -42,9 +42,7 @@ public class GroupController {
      */
     @GetMapping("/{id}")
     public ResponseEntity<Group> getGroup(@PathVariable Long id) {
-        Group group = groupService.getGroupById(id);
-        if (group == null) throw new ResponseStatusException(HttpStatus.NO_CONTENT);
-        return new ResponseEntity<>(group, HttpStatus.OK);
+        return new ResponseEntity<>(groupService.getGroupById(id), HttpStatus.OK);
     }
 
     /**
@@ -55,9 +53,7 @@ public class GroupController {
      */
     @GetMapping("/name/{name}")
     public ResponseEntity<List<Group>> getGroupByName(@PathVariable String name) {
-        List<Group> group = groupService.getGroupsByName(name);
-        if (group == null) throw new ResponseStatusException(HttpStatus.NO_CONTENT);
-        return new ResponseEntity<>(group, HttpStatus.OK);
+        return new ResponseEntity<>(groupService.getGroupsByName(name), HttpStatus.OK);
     }
 
     /**
@@ -68,9 +64,7 @@ public class GroupController {
      */
     @GetMapping("/in/{markId}")
     public ResponseEntity<List<Group>> getGroupsByMarkId(@PathVariable String markId) {
-        List<Group> group = groupService.getGroupsByMarkId(markId);
-        if (group == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        return new ResponseEntity<>(group, HttpStatus.OK);
+        return new ResponseEntity<>(groupService.getGroupsByMarkId(markId), HttpStatus.OK);
     }
 
 
@@ -83,7 +77,6 @@ public class GroupController {
     @PostMapping
     public ResponseEntity<Group> createGroup(@RequestBody @Valid GroupDTO groupDTO) {
         return new ResponseEntity<>(groupService.save(groupDTO), HttpStatus.CREATED);
-
     }
 
     /**
@@ -96,10 +89,7 @@ public class GroupController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Group> updateGroup(@PathVariable Long id, @RequestBody @Valid GroupDTO groupDTO) {
-        Group group = groupService.update(id, groupDTO);
-        if (group == null) throw new ResponseStatusException(HttpStatus.NO_CONTENT);
-        return new ResponseEntity<>(group, HttpStatus.OK);
-
+        return new ResponseEntity<>(groupService.update(id, groupDTO), HttpStatus.OK);
     }
 
 

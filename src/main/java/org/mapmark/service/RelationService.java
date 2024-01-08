@@ -6,6 +6,7 @@ import org.mapmark.model.Mark;
 import org.mapmark.repo.GroupRepository;
 import org.mapmark.repo.MarkRepository;
 import org.mapmark.security.config.AuthFacadeImpl;
+import org.mapmark.util.exceptions.DataNotFoundException;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
@@ -25,10 +26,10 @@ public class RelationService {
     public Mark addGroupToMark(RelationsDTO ids) {
 
         Group group = getGroupEntity(ids.getGroupId());
-        if (group == null) return null;
+        if (group == null) throw new DataNotFoundException("Group with id " + ids.getGroupId() + " not found");
 
         Mark mark = getMarkEntity(ids.getMarkId());
-        if (mark == null) return null;
+        if (mark == null)  throw new DataNotFoundException("Mark with id " + ids.getMarkId() + " not found");
 
         mark.addGroup(group);
         return markRepository.save(mark);
@@ -38,7 +39,7 @@ public class RelationService {
     public Mark removeMarkFromGroup(RelationsDTO ids) {
 
         Mark mark = getMarkEntity(ids.getMarkId());
-        if (mark == null) return null;
+        if (mark == null) throw new DataNotFoundException("Mark with id " + ids.getMarkId() + " not found");;
 
         mark.removeGroup(ids.getGroupId());
         return markRepository.save(mark);

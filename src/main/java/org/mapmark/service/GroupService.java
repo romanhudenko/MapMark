@@ -4,6 +4,7 @@ import org.mapmark.dto.GroupDTO;
 import org.mapmark.model.Group;
 import org.mapmark.repo.GroupRepository;
 import org.mapmark.security.config.AuthFacadeImpl;
+import org.mapmark.util.exceptions.DataNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -27,7 +28,9 @@ public class GroupService {
 
 
     public Group getGroupById(Long id) {
-        return groupRepository.findByIdAndUser_Username(id, authFacade.getUsername());
+        Group group = groupRepository.findByIdAndUser_Username(id, authFacade.getUsername());
+        if (group == null) throw new DataNotFoundException("Group with id " + id + " not found");
+        return group;
     }
 
     public List<Group> getGroupsByName(String name) {
@@ -71,7 +74,7 @@ public class GroupService {
     public Group update(Long id, GroupDTO groupDTO) {
 
         Group group = groupRepository.findByIdAndUser_Username(id, authFacade.getUsername());
-        if (group == null) return null;
+        if (group == null) throw new DataNotFoundException("Group with id " + id + " not found");
 
         if (!groupDTO.getName().isBlank()) {
             group.setName(groupDTO.getName());

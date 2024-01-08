@@ -9,6 +9,7 @@ import org.mapmark.model.User;
 import org.mapmark.repo.RoleRepository;
 import org.mapmark.repo.UserRepository;
 import org.mapmark.security.config.AuthFacadeImpl;
+import org.mapmark.util.exceptions.DataNotFoundException;
 import org.mapmark.util.exceptions.UserAlreadyExistException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -25,23 +26,16 @@ public class UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
-    private final AuthenticationManager authenticationManager;
-//    private final RememberMeServices rememberMeServices;
-
     private final AuthFacadeImpl authFacade;
 
 
     public UserService(UserRepository userRepository,
                        RoleRepository roleRepository,
                        PasswordEncoder passwordEncoder,
-                       AuthenticationManager authenticationManager,
-                       RememberMeServices rememberMeServices,
                        AuthFacadeImpl authFacade) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
-        this.authenticationManager = authenticationManager;
-//        this.rememberMeServices = rememberMeServices;
         this.authFacade = authFacade;
     }
 
@@ -68,45 +62,48 @@ public class UserService {
     }
 
 
-//    public User updateUser(UserDTO userDTO) {
-//
-//        User user = User.builder()
-//                .email(userDTO.getEmail())
-//                .username(userDTO.getUsername())
-//                .password(passwordEncoder.encode(userDTO.getPassword()))
-//                .build();
-//
-//        userRepository.save(user);
-//
-//
-//        return user;
-//    }
-//
-//
-//    public User removeRoleFromUser(Long userId, String role) {
-//
-//        User user = userRepository.findById(userId).orElse(null);
-//        if (user == null) return null; //fixme USER NOT FOUND
-//        user.removeRole(role);
-//
-//        return user;
-//    }
-//
-//    public User promoteUserRole(Long userId, String roleName) {
-//
-//        User user = userRepository.findById(userId).orElse(null);
-//        if (user == null) return null; //fixme USER NOT FOUND
-//
-//        Role role = roleRepository.findByName(roleName).orElse(null);
-//        if (role == null) return null; //fixme INVALID ROLE
-//        user.addRole(role);
-//
-//        return user;
-//    }
+    public User updateUser(UserDTO userDTO) {
+
+        User user = User.builder()
+                .email(userDTO.getEmail())
+                .username(userDTO.getUsername())
+                .password(passwordEncoder.encode(userDTO.getPassword()))
+                .build();
+
+        userRepository.save(user);
+
+
+        return user;
+    }
+
+
+    public User removeRoleFromUser(Long userId, String role) {
+
+        User user = userRepository.findById(userId).orElse(null);
+        if (user == null)
+            throw new DataNotFoundException("User with id " + userId + " not found");
+        user.removeRole(role);
+
+        return user;
+    }
+
+    public User promoteUserRole(Long userId, String roleName) {
+
+        User user = userRepository.findById(userId).orElse(null);
+        if (user == null) throw new DataNotFoundException("User with id " + userId + " not found");
+
+        Role role = roleRepository.findByName(roleName).orElse(null);
+        if (role == null) throw new DataNotFoundException("Invalid role " + roleName);
+        user.addRole(role);
+
+        return user;
+    }
 
 
     public User getUserById(Long id) {
-        return userRepository.findById(id).orElse(null);
+        User user = userRepository.findById(id).orElse(null);
+        if (user == null) throw new DataNotFoundException("User " + id + " not found");
+        return user;
 
     }
 

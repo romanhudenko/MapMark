@@ -16,7 +16,7 @@ import java.security.Principal;
 public class MainController {
 
 
-    @GetMapping("/log")
+    @GetMapping("/login")
     public ModelAndView index() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("index.html");

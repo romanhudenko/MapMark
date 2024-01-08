@@ -33,10 +33,5 @@ public class AuthFacadeImpl implements AuthFacade {
     }
 
 
-//    public void login(LoginDTO loginDTO) {
-//        Authentication authentication = authenticationManager
-//                .authenticate(new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword()));
-//
-//    }
 
 }

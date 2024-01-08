@@ -70,11 +70,11 @@ public class WebSecurityConfig {
         http.logout(_logout -> _logout.deleteCookies("JSESSIONID")
                 .logoutUrl("/logout")
                 .clearAuthentication(true)
-                .logoutSuccessUrl("/"));
+                .logoutSuccessUrl("/login"));
 
         http.rememberMe(rem -> rem.alwaysRemember(true));
 
-        http.formLogin(log -> log.loginPage("/log"));
+        http.formLogin(log -> log.loginPage("/login"));
 
 
         http.httpBasic(withDefaults());

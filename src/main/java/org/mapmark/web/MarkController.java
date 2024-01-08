@@ -43,10 +43,7 @@ public class MarkController {
 
     @GetMapping("/{uuid}")
     public ResponseEntity<Mark> getMarkById(@PathVariable String uuid) {
-        Mark mark = markService.getMarkByUUID(uuid);
-        //todo add handler
-        if (mark == null) throw new ResponseStatusException(HttpStatus.NO_CONTENT);
-        return new ResponseEntity<>(mark, HttpStatus.OK);
+        return new ResponseEntity<>(markService.getMarkByUUID(uuid), HttpStatus.OK);
     }
 
     /**
@@ -58,10 +55,7 @@ public class MarkController {
 
     @GetMapping("/name/{name}")
     public ResponseEntity<List<Mark>> getMarkByName(@PathVariable String name) {
-        List<Mark> mark = markService.getByName(name);
-        //todo add handler
-        if (mark == null) throw new ResponseStatusException(HttpStatus.NO_CONTENT);
-        return new ResponseEntity<>(mark, HttpStatus.OK);
+        return new ResponseEntity<>(markService.getByName(name), HttpStatus.OK);
     }
 
     /**
@@ -73,9 +67,7 @@ public class MarkController {
 
     @GetMapping("/in/{groupId}")
     public ResponseEntity<List<Mark>> getMarksInGroup(@PathVariable Long groupId) {
-        List<Mark> mark = markService.getMarksInGroup(groupId);
-        if (mark == null) throw new ResponseStatusException(HttpStatus.NO_CONTENT);
-        return new ResponseEntity<>(mark, HttpStatus.OK);
+        return new ResponseEntity<>(markService.getMarksInGroup(groupId), HttpStatus.OK);
     }
 
     /**
@@ -86,9 +78,7 @@ public class MarkController {
      */
     @PostMapping
     public ResponseEntity<Mark> addMark(@RequestBody @Valid MarkDTO markDTO) {
-
         return new ResponseEntity<>(markService.save(markDTO), HttpStatus.CREATED);
-
     }
 
     /**
@@ -100,11 +90,7 @@ public class MarkController {
      */
     @PutMapping("/{uuid}")
     public ResponseEntity<Mark> updateMark(@PathVariable String uuid, @Valid @RequestBody MarkDTO markDTO) {
-
-        Mark mark = markService.update(uuid, markDTO);
-        //todo add handler
-        if (mark == null) throw new ResponseStatusException(HttpStatus.NO_CONTENT);
-        return new ResponseEntity<>(mark, HttpStatus.OK);
+        return new ResponseEntity<>(markService.update(uuid, markDTO), HttpStatus.OK);
 
     }
 

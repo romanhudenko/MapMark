@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    //todo add another handlers
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, List<String>>> handleValidationErrors(MethodArgumentNotValidException ex) {
@@ -35,15 +34,6 @@ public class GlobalExceptionHandler {
 
     }
 
-//    @ExceptionHandler(NoHandlerFoundException.class)
-//    @ResponseStatus(HttpStatus.NOT_FOUND)
-//    public ResponseEntity<Object> handleNoHandlerFound(NoHandlerFoundException e, WebRequest request) {
-//        ApiResponse apiResponse = new ApiResponse(
-//                HttpStatus.NOT_FOUND, e.getTitleMessageCode(), "Error occurred at: " + request);
-//        return new ResponseEntity<>(apiResponse, new HttpHeaders(), apiResponse.getStatus());
-//    }
-
-
     @ExceptionHandler(UserAlreadyExistException.class)
     public ResponseEntity<Object> userAlreadyExist(UserAlreadyExistException ex) {
         ApiResponse apiResponse = new ApiResponse(
@@ -53,12 +43,18 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(apiResponse, new HttpHeaders(), apiResponse.getStatus());
     }
 
-//    @ExceptionHandler(Exception.class)
-//    public ResponseEntity<Object> handleAll(Exception ex, WebRequest request) {
-//        ApiResponse apiResponse = new ApiResponse(
-//                HttpStatus.INTERNAL_SERVER_ERROR, ex.getLocalizedMessage(), "Error occurred at: " + request);
-//        return new ResponseEntity<>(apiResponse, new HttpHeaders(), apiResponse.getStatus());
-//    }
+
+    @ExceptionHandler(DataNotFoundException.class)
+    public ResponseEntity<Object> dataNotFound(DataNotFoundException ex) {
+        ApiResponse apiResponse = new ApiResponse(
+                HttpStatus.NOT_FOUND.value(),
+                HttpStatus.NOT_FOUND,
+                ex.getMessage());
+        return new ResponseEntity<>(apiResponse, new HttpHeaders(), apiResponse.getStatus());
+    }
+
+
+
 
 
     private Map<String, List<String>> getErrorsMap(List<String> errors) {
