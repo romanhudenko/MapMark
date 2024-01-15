@@ -16,7 +16,7 @@ import java.security.Principal;
 public class MainController {
 
 
-    @GetMapping("/login")
+    @GetMapping("/")
     public ModelAndView index() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("index.html");
@@ -28,11 +28,7 @@ public class MainController {
         return new ResponseEntity<>(null, HttpStatus.OK);
     }
 
-    @GetMapping("/")
-    public String userPage(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        if (userDetails == null) return "user not authorized";
-        return userDetails.getId() + " " + userDetails.getUsername();
-    }
+
 
 
 

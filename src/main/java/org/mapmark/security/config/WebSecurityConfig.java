@@ -62,6 +62,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/api/mark/**").hasAnyRole("USER", "ADMIN", "MODERATOR")
                         .requestMatchers("/api/group/**").hasAnyRole("USER", "ADMIN", "MODERATOR")
                         .requestMatchers("/api/user/registration").permitAll()
+                        .requestMatchers("/api/user/status").permitAll()
                         .requestMatchers("/").permitAll()
                         .anyRequest().permitAll()
 
@@ -70,11 +71,11 @@ public class WebSecurityConfig {
         http.logout(_logout -> _logout.deleteCookies("JSESSIONID")
                 .logoutUrl("/logout")
                 .clearAuthentication(true)
-                .logoutSuccessUrl("/login"));
+                .logoutSuccessUrl("/"));
 
         http.rememberMe(rem -> rem.alwaysRemember(true));
 
-        http.formLogin(log -> log.loginPage("/login"));
+        http.formLogin(log -> log.loginPage("/"));
 
 
         http.httpBasic(withDefaults());

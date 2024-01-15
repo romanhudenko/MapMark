@@ -2,7 +2,7 @@ function check_is_logged_in(callback) {
     'use strict';
     debug('check_is_logged_in')
     load_get(
-        '/',
+        '/api/user/status',
         function(data) {
             let is_logged_in = data !== 'user not authorized';
             debug('check_is_logged_in: ' + String(is_logged_in))
