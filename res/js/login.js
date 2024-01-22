@@ -17,6 +17,10 @@ window.onload = function () {
         function(flag) {
             if (flag) {
                 move_to_page('/app.html');
+            } else {
+                if (window.location.href.endsWith("error")) {
+                    $('#error_block').show();
+                }
             }
         }
     );
