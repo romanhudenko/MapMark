@@ -27,6 +27,9 @@
             <li class="nav-item">
               <a class="nav-link active" aria-current="page" href="#" data-bs-toggle="modal" data-bs-target="#groups_modal">Группы меток</a>
             </li>
+            <li id="show_all_marks_button" class="nav-item fade">
+              <a class="nav-link" href="javascript:show_all_marks_request()" onсlick="show_all_marks_request();return false;">Показывать все метки</a>
+            </li>
           </ul>
           <form class="d-flex" role="search">
             <span id="username_place" class="navbar-text" style="padding-right: 10px;">Вы вошли как User</span>
@@ -81,6 +84,27 @@
         </div>
       </div>
     </div>
+    <div class="modal fade" id="group_add_mark_modal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="group_add_mark_modal_label" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="group_add_mark_modal_label">Добавить метку в группу</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="input-group mb-3">
+                <span class="input-group-text" id="basic-addon1">Фильтр:</span>
+                <input oninput="update_add_group_mark_filter();" id="add_group_mark_input" type="text" class="form-control" placeholder="Начните писать имя метки" aria-label="Начните писать имя метки" aria-describedby="basic-addon1">
+                <button class="btn btn-outline-secondary" type="button" id="button-addon3" onclick="clear_add_group_mark_field();">Очистить</button>
+              </div>
+              <table class="table">
+                <tbody id="group_add_mark_tbody">
+                </tbody>
+              </table>
+            </div>
+        </div>
+      </div>
+    </div>
     <div class="modal fade" id="new_mark_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="new_mark_modal_label" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -92,20 +116,45 @@
               <form method="post" action="#">
                 <input type="hidden" id="new_mark_lon">
                 <input type="hidden" id="new_mark_lat">
-                <div class="form-floating">
-                  <input type="text" class="form-control" id="mark_name" placeholder="Логин" style="margin-bottom: -1px; border-bottom-right-radius: 0; border-bottom-left-radius: 0;">
-                  <label for="mark_name">Название</label>
+                <div class="mb-3">
+                  <label for="mark_name" class="form-label">Название</label>
+                  <input type="email" class="form-control" id="mark_name" aria-describedby="emailHelp">
                 </div>
-                <div class="form-floating">
-                  <select id="mark_color" class="form-select" aria-label="Default select example" style="margin-bottom: -1px; border-top-right-radius: 0; border-top-left-radius: 0;">
-                    <option value="FFFFFF" selected>Белый</option>
-                    <option value="000000">Чёрный</option>
-                  </select>
+                <div class="mb-3">
+                  <label class="form-label" for="mark_color">Цвет метки</label>
+                  <input type="color" class="form-control form-control-color" id="mark_color" value="#563d7c" title="Выберите цвет">
                 </div>
               </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" onclick="create_new_mark();">Принять</button>
+            </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade" id="edit_mark_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="edit_mark_modal_label" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="edit_mark_modal_label">Редактор метки</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form method="post" action="#">
+                <input type="hidden" id="edit_mark_lon">
+                <input type="hidden" id="edit_mark_lat">
+                <div class="mb-3">
+                  <label for="edit_mark_name" class="form-label">Название</label>
+                  <input type="email" class="form-control" id="edit_mark_name" aria-describedby="emailHelp">
+                </div>
+                <div class="mb-3">
+                  <label class="form-label" for="edit_mark_color">Цвет метки</label>
+                  <input type="color" class="form-control form-control-color" id="edit_mark_color" value="#563d7c" title="Выберите цвет">
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="update_mark();">Принять</button>
             </div>
         </div>
       </div>
@@ -153,10 +202,36 @@
                   <input type="text" class="form-control" id="edit_group_description" style="margin-bottom: -1px; border-top-right-radius: 0; border-top-left-radius: 0;">
                   <label for="edit_group_description">Описание</label>
                 </div>
+                <div class="form-floating">
+                </div>
               </form>
             </div>
             <div class="modal-footer">
+              <button type="button" class="btn btn-warning" onclick="edit_group_marks();">Редактировать метки группы</button>
                 <button type="button" class="btn btn-primary" onclick="update_group();">Принять</button>
+            </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade" id="group_marks_modal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="group_marks_modal_label" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="group_marks_modal_label">Метки группы</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <tbody id="group_marks_tbody">
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+              <div class="input-group">
+                <select class="form-select" id="add_mark_select" aria-label="Добавить метку в группу">
+                </select>
+                <button class="btn btn-outline-secondary" type="button" onclick="add_mark_to_group();">Добавить</button>
+              </div>
             </div>
         </div>
       </div>
