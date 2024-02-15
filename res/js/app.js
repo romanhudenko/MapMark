@@ -1,9 +1,10 @@
-var username, y_map, editing_mark, editing_group,
+var username, y_map, editing_mark, editing_group, moving_mark,
         marks = [],
         groups = [];
 
 var add_mark_select = document.getElementById('add_mark_select'),
     marks_modal = document.getElementById('marks_modal'),
+    marks_modal_bootstrap = new bootstrap.Modal(marks_modal),
     groups_modal = document.getElementById('groups_modal'),
     groups_modal_bootstrap = new bootstrap.Modal(document.getElementById('groups_modal')),
     new_mark_modal = new bootstrap.Modal(document.getElementById('new_mark_modal')),
@@ -37,6 +38,7 @@ function update_mark() {
         };
         mark.data.name = name;
         mark.data.colorHex = colorHex.substring(1);
+    mark.tr.firstChild.innerText = name;
     y_map.geoObjects.remove(mark.ymap);
     mark.ymap = new ymaps.Placemark(
         [mark.data.longitude, mark.data.latitude],
@@ -60,6 +62,51 @@ function update_mark() {
         body: JSON.stringify(data)
     });
     edit_mark_modal.hide();
+}
+
+function move_mark_request() {
+    'use strict';
+    moving_mark = true;
+    choose_action_modal.hide();
+    alert('Дважды щёлкните на карте куда хотели бы перенести метку');
+}
+
+function move_mark(lon, lat) {
+    'use strict';
+    'use strict';
+    var mark = editing_mark,
+        name = editing_mark.data.name,
+        colorHex = editing_mark.data.colorHex,
+        data = {
+            'id': mark.data.id,
+            'name': name,
+            'latitude': lat,
+            'longitude': lon,
+            'colorHex': colorHex
+        };
+    y_map.geoObjects.remove(mark.ymap);
+    mark.ymap = new ymaps.Placemark(
+        [data.longitude, data.latitude],
+        {
+            iconCaption: name
+        }, {
+            preset: 'islands#icon',
+            iconColor: '#' + colorHex
+        }
+    );
+    mark.ymap.events.add('click', function () {
+        editing_mark = mark;
+        choose_action_modal.show();
+    });
+    y_map.geoObjects.add(mark.ymap);
+    fetch('/api/mark/' + mark.data.id, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    });
+    mark.data = data;
 }
 
 function edit_mark() {
@@ -159,6 +206,18 @@ function clear_filter_field() {
     update_filter();
 }
 
+function move_to_mark_request(event) {
+    'use strict';
+    var i;
+    for (i = 0; i < marks.length; i += 1) {
+        if (marks[i].data.id == event.target.getAttribute('data-id')) {
+            y_map.setCenter([marks[i].data.longitude, marks[i].data.latitude]);
+            marks_modal_bootstrap.hide();
+            break;
+        }
+    }
+}
+
 function add_and_render_mark(mark_data) {
     'use strict';
     debug('add_and_render_mark');
@@ -183,6 +242,8 @@ function add_and_render_mark(mark_data) {
             name_td = document.createElement('td'),
             edit_td = document.createElement('td'),
             edit_div = document.createElement('div'),
+            to_mark_but = document.createElement('button'),
+            to_mark_i = document.createElement('i'),
             edit_but = document.createElement('button'),
             edit_i = document.createElement('i'),
             delete_but = document.createElement('button'),
@@ -193,6 +254,14 @@ function add_and_render_mark(mark_data) {
         edit_td.setAttribute('class', 'd-flex flex-row-reverse');
         edit_div.setAttribute('class', 'btn-group');
         edit_div.setAttribute('role', 'group');
+        to_mark_i.setAttribute('class', 'bi bi-pin-map');
+        to_mark_i.setAttribute('data-id', mark_data.id);
+        to_mark_but.setAttribute('title', 'К метке');
+        to_mark_but.appendChild(to_mark_i);
+        to_mark_but.setAttribute('class', 'btn btn-primary');
+        to_mark_but.setAttribute('type', 'button');
+        to_mark_but.setAttribute('data-id', mark_data.id);
+        to_mark_but.onclick = move_to_mark_request;
         edit_i.setAttribute('class', 'bi bi-wrench');
         edit_i.setAttribute('data-id', mark_data.id);
         edit_but.setAttribute('title', 'Редактировать');
@@ -209,6 +278,7 @@ function add_and_render_mark(mark_data) {
         delete_but.setAttribute('type', 'button');
         delete_but.setAttribute('data-id', mark_data.id);
         delete_but.onclick = delete_mark_request;
+        edit_div.appendChild(to_mark_but);
         edit_div.appendChild(edit_but);
         edit_div.appendChild(delete_but);
         edit_td.appendChild(edit_div);
@@ -561,6 +631,7 @@ function start_mark_creation() {
 function start_group_creation() {
     'use strict';
     document.getElementById('group_name').value = '';
+    document.getElementById('group_description').value = '';
     new_group_modal.show();
 }
 
@@ -641,14 +712,19 @@ function start() {
 function init() {
     y_map = new ymaps.Map("map", {
         center: [55.76, 37.64],
-        zoom: 7
+        zoom: 10
     });
     y_map.behaviors.disable('dblClickZoom');
     y_map.events.add('dblclick', function (e) {
         var coords = e.get('coords'),
             lon = coords[0].toPrecision(6),
             lat = coords[1].toPrecision(6);
-        open_new_mark_form_modal(lon, lat);
+        if (moving_mark) {
+            move_mark(lon, lat);
+            moving_mark = false;
+        } else {
+            open_new_mark_form_modal(lon, lat);
+        }
     });
     start();
 }
@@ -680,3 +756,9 @@ function create_new_mark() {
         );
     }
 }
+
+$(document).on('show.bs.modal', '.modal', function() {
+    const zIndex = 1040 + 10 * $('.modal:visible').length;
+    $(this).css('z-index', zIndex);
+    setTimeout(() => $('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack'));
+  });

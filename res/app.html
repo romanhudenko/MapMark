@@ -42,7 +42,7 @@
         <div id="map" style="width: 100%; height: 100%"></div>
     </main>
     <div class="modal fade" id="groups_modal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="groups_modal_label" aria-hidden="true">
-      <div class="modal-dialog">
+      <div class="modal-dialog modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="groups_modal_label">Мои группы меток</h1>
@@ -61,7 +61,7 @@
       </div>
     </div>
     <div class="modal fade" id="marks_modal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="marks_modal_label" aria-hidden="true">
-      <div class="modal-dialog">
+      <div class="modal-dialog modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="marks_modal_label">Мои метки</h1>
@@ -106,7 +106,7 @@
       </div>
     </div>
     <div class="modal fade" id="new_mark_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="new_mark_modal_label" aria-hidden="true">
-      <div class="modal-dialog">
+      <div class="modal-dialog modal-dialog-centered modal-sm">
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="new_mark_modal_label">Новая метка</h1>
@@ -127,13 +127,14 @@
               </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" onclick="create_new_mark();">Принять</button>
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+              <button type="button" class="btn btn-success" onclick="create_new_mark();">Создать</button>
             </div>
         </div>
       </div>
     </div>
-    <div class="modal fade" id="edit_mark_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="edit_mark_modal_label" aria-hidden="true">
-      <div class="modal-dialog">
+    <div class="modal fade" id="edit_mark_modal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="edit_mark_modal_label" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-sm">
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="edit_mark_modal_label">Редактор метки</h1>
@@ -154,13 +155,13 @@
               </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" onclick="update_mark();">Принять</button>
+              <button type="button" class="btn btn-primary" onclick="update_mark();">Принять</button>
             </div>
         </div>
       </div>
     </div>
     <div class="modal fade" id="new_group_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="new_group_modal_label" aria-hidden="true">
-      <div class="modal-dialog">
+      <div class="modal-dialog modal-dialog-centered modal-sm">
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="new_group_modal_label">Новая группа меток</h1>
@@ -179,13 +180,13 @@
               </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" onclick="create_new_group();">Принять</button>
+                <button type="button" class="btn btn-success" onclick="create_new_group();">Создать</button>
             </div>
         </div>
       </div>
     </div>
-    <div class="modal fade" id="edit_group_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="edit_group_modal_label" aria-hidden="true">
-      <div class="modal-dialog">
+    <div class="modal fade" id="edit_group_modal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="edit_group_modal_label" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="edit_group_modal_label">Редактор группы меток</h1>
@@ -207,14 +208,15 @@
               </form>
             </div>
             <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
               <button type="button" class="btn btn-warning" onclick="edit_group_marks();">Редактировать метки группы</button>
-                <button type="button" class="btn btn-primary" onclick="update_group();">Принять</button>
+              <button type="button" class="btn btn-primary" onclick="update_group();">Принять</button>
             </div>
         </div>
       </div>
     </div>
     <div class="modal fade" id="group_marks_modal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="group_marks_modal_label" aria-hidden="true">
-      <div class="modal-dialog">
+      <div class="modal-dialog modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="group_marks_modal_label">Метки группы</h1>
@@ -237,13 +239,18 @@
       </div>
     </div>
     <div class="modal fade" id="choose_action_modal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="choose_action_modal_label" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-dialog modal-dialog-centered modal-sm">
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="choose_action_modal_label">Что сделать с меткой?</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
+              <p>
+                <div class="container text-center">
+                  <button type="button" class="btn btn-primary" onclick="move_mark_request();">Переместить</button>
+                </div>
+              </p>
               <p>
                 <div class="container text-center">
                   <button type="button" class="btn btn-warning" onclick="edit_mark();">Редактировать</button>
