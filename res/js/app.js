@@ -35,33 +35,38 @@ function update_mark() {
             'latitude': mark.data.latitude,
             'longitude': mark.data.longitude,
             'colorHex': colorHex.substring(1)
-        };
+        },
+        validation = validate_mark(data);
         mark.data.name = name;
         mark.data.colorHex = colorHex.substring(1);
-    mark.tr.firstChild.innerText = name;
-    y_map.geoObjects.remove(mark.ymap);
-    mark.ymap = new ymaps.Placemark(
-        [mark.data.longitude, mark.data.latitude],
-        {
-            iconCaption: name
-        }, {
-            preset: 'islands#icon',
-            iconColor: colorHex
-        }
-    );
-    mark.ymap.events.add('click', function () {
-        editing_mark = mark;
-        choose_action_modal.show();
-    });
-    y_map.geoObjects.add(mark.ymap);
-    fetch('/api/mark/' + mark.data.id, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-    });
-    edit_mark_modal.hide();
+    if (validation.error) {
+        alert(validation.message);
+    } else {
+        mark.tr.firstChild.innerText = name;
+        y_map.geoObjects.remove(mark.ymap);
+        mark.ymap = new ymaps.Placemark(
+            [mark.data.longitude, mark.data.latitude],
+            {
+                iconCaption: name
+            }, {
+                preset: 'islands#icon',
+                iconColor: colorHex
+            }
+        );
+        mark.ymap.events.add('click', function () {
+            editing_mark = mark;
+            choose_action_modal.show();
+        });
+        y_map.geoObjects.add(mark.ymap);
+        fetch('/api/mark/' + mark.data.id, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+        edit_mark_modal.hide();
+    }
 }
 
 function move_mark_request() {
@@ -312,34 +317,44 @@ function update_group() {
         id = document.getElementById('edit_group_id').value,
         name = document.getElementById('edit_group_name').value,
         description = document.getElementById('edit_group_description').value,
-        icon = '';
-    fetch('/api/group/' + id, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json'
+        icon = '',
+        data = {
+            'name': name,
+            'description': description,
+            'icon': icon
         },
-        body: JSON.stringify(
-            {
-                'name': name,
-                'description': description,
-                'icon': icon
+        validation = validate_group(data);
+    if (validation.error) {
+        alert(validation.message);
+    } else {
+        fetch('/api/group/' + id, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(
+                {
+                    'name': name,
+                    'description': description,
+                    'icon': icon
+                }
+            )
+        });
+        for (i = 0; i < groups.length; i += 1) {
+            temp_group = groups[i];
+            console.log(temp_group.data.id);
+            console.log(id);
+            if (temp_group.data.id == id) {
+                group = temp_group;
+                break;
             }
-        )
-    });
-    for (i = 0; i < groups.length; i += 1) {
-        temp_group = groups[i];
-        console.log(temp_group.data.id);
-        console.log(id);
-        if (temp_group.data.id == id) {
-            group = temp_group;
-            break;
         }
+        group.tr.firstChild.innerHTML = name;
+        group.data.name = name;
+        group.data.description = description;
+        group.data.icon = icon;
+        edit_group_modal.hide();
     }
-    group.tr.firstChild.innerHTML = name;
-    group.data.name = name;
-    group.data.description = description;
-    group.data.icon = icon;
-    edit_group_modal.hide();
 }
 
 function edit_group_request(event) {
@@ -429,6 +444,20 @@ function show_group_request(event) {
     );
 }
 
+function show_group_marks_editor_request(event) {
+    'use strict';
+    debug('show_group_marks_editor_request');
+    var i, temp_group, id = event.target.getAttribute('data-id');
+    for (i = 0; i < groups.length; i += 1) {
+        temp_group = groups[i];
+        if (temp_group.data.id == id) {
+            editing_group = temp_group;
+            edit_group_marks();
+            break;
+        }
+    }
+}
+
 function add_and_render_group(group_data) {
     'use strict';
     debug('add_and_render_mark');
@@ -445,6 +474,8 @@ function add_and_render_group(group_data) {
             edit_div = document.createElement('div'),
             show_but = document.createElement('button'),
             show_i = document.createElement('i'),
+            show_marks_but = document.createElement('button'),
+            show_marks_i = document.createElement('i'),
             edit_but = document.createElement('button'),
             edit_i = document.createElement('i'),
             delete_but = document.createElement('button'),
@@ -463,6 +494,14 @@ function add_and_render_group(group_data) {
         show_but.setAttribute('type', 'button');
         show_but.setAttribute('data-id', group_data.id);
         show_but.onclick = show_group_request;
+        show_marks_i.setAttribute('class', 'bi bi-pin-map-fill');
+        show_marks_i.setAttribute('data-id', group_data.id);
+        show_marks_but.setAttribute('title', 'Редактировать метки');
+        show_marks_but.appendChild(show_marks_i);
+        show_marks_but.setAttribute('class', 'btn btn-warning');
+        show_marks_but.setAttribute('type', 'button');
+        show_marks_but.setAttribute('data-id', group_data.id);
+        show_marks_but.onclick = show_group_marks_editor_request;
         edit_i.setAttribute('class', 'bi bi-wrench');
         edit_i.setAttribute('data-id', group_data.id);
         edit_but.setAttribute('title', 'Редактировать');
@@ -480,6 +519,7 @@ function add_and_render_group(group_data) {
         delete_but.setAttribute('data-id', group_data.id);
         delete_but.onclick = delete_group_request;
         edit_div.appendChild(show_but);
+        edit_div.appendChild(show_marks_but);
         edit_div.appendChild(edit_but);
         edit_div.appendChild(delete_but);
         edit_td.appendChild(edit_div);

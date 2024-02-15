@@ -23,7 +23,7 @@ function validate_password(password, password_check) {
 
 function validate_mark(mark_data) {
     'use strict';
-    var format = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
+    var format = /[@#$%^&*()_+\-=\[\]{};':"\\|<>\/]+/;
     debug(mark_data);
     if (mark_data.name === undefined || mark_data.name.length === 0) {
         return {
@@ -44,7 +44,7 @@ function validate_mark(mark_data) {
 
 function validate_group(group_data) {
     'use strict';
-    var format = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
+    var format = /[@#$%^&*()_+\-=\[\]{};':"\\|<>\/]+/;
     debug(group_data);
     if (group_data.name === undefined || group_data.name.length === 0) {
         return {
