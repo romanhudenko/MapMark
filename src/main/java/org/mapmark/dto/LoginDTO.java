@@ -11,13 +11,13 @@ import lombok.Data;
 public class LoginDTO {
 
 
-    @NotBlank(message = "Invalid UserName: Empty UserName")
-    @NotNull(message = "Invalid UserName: UserName is NULL")
+    @NotBlank(message = "Invalid username: username is empty")
+    @NotNull(message = "Invalid username: username is NULL")
     private String username;
 
 
-    @NotBlank(message = "Invalid Password: Empty Password")
-    @NotNull(message = "Invalid Password: Password is NULL")
+    @NotBlank(message = "Invalid password: password is empty")
+    @NotNull(message = "Invalid password: password is NULL")
     private String password;
 
 }

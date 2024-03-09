@@ -2,6 +2,7 @@ package org.mapmark.web;
 
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.mapmark.dto.MarkDTO;
 import org.mapmark.model.Mark;
 import org.mapmark.security.service.UserDetailsImpl;
@@ -15,13 +16,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/mark")
+@RequiredArgsConstructor
 public class MarkController {
 
     private final MarkService markService;
-
-    public MarkController(MarkService markService) {
-        this.markService = markService;
-    }
 
 
     /**
@@ -100,9 +98,9 @@ public class MarkController {
      * @param id mark uuid
      */
 
-    @DeleteMapping("/{id}")
-    public void deleteMark(@PathVariable String id) {
-        markService.remove(id);
+    @DeleteMapping("/{uuid}")
+    public void deleteMark(@PathVariable String uuid) {
+        markService.remove(uuid);
     }
 
 }

@@ -9,17 +9,17 @@ import lombok.Data;
 public class UserDTO {
 
 
-    @NotBlank(message = "Invalid UserName: Empty UserName")
-    @NotNull(message = "Invalid UserName: UserName is NULL")
+    @NotBlank(message = "Invalid username: username is empty")
+    @NotNull(message = "Invalid username: username is NULL")
     private String username;
 
     @Email
-    @NotBlank(message = "Invalid Email: Empty Email")
-    @NotNull(message = "Invalid Email: Email is NULL")
+    @NotBlank(message = "Invalid email: email is empty")
+    @NotNull(message = "Invalid email: email is NULL")
     private String email;
 
-    @NotBlank(message = "Invalid Password: Empty Password")
-    @NotNull(message = "Invalid Password: Password is NULL")
+    @NotBlank(message = "Invalid password: password is empty")
+    @NotNull(message = "Invalid password: password is NULL")
     private String password;
 
 }

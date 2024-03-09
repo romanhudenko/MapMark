@@ -1,45 +1,51 @@
 package org.mapmark.util.exceptions;
 
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.NoHandlerFoundException;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    public static final String VALIDATION_FAILED = "Validation failed";
+    public static final String DATA_NOT_FOUND = "Data not found";
+    public static final String USER_EXIST = "User already exist";
+
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, List<String>>> handleValidationErrors(MethodArgumentNotValidException ex) {
+    public ResponseEntity<Object> handleValidationErrors(MethodArgumentNotValidException ex) {
+
 
         List<String> errors = ex.getBindingResult().getFieldErrors()
                 .stream()
                 .map(FieldError::getDefaultMessage)
                 .collect(Collectors.toList());
 
-        return new ResponseEntity<>(getErrorsMap(errors), new HttpHeaders(), HttpStatus.BAD_REQUEST);
+        ApiResponse apiResponse = new ApiResponse(
+                HttpStatus.BAD_REQUEST.value(),
+                HttpStatus.BAD_REQUEST,
+                VALIDATION_FAILED,
+                errors);
 
+        return new ResponseEntity<>(apiResponse, new HttpHeaders(), apiResponse.getStatus());
     }
+
 
     @ExceptionHandler(UserAlreadyExistException.class)
     public ResponseEntity<Object> userAlreadyExist(UserAlreadyExistException ex) {
         ApiResponse apiResponse = new ApiResponse(
                 HttpStatus.BAD_REQUEST.value(),
                 HttpStatus.BAD_REQUEST,
-                ex.getMessage());
+                USER_EXIST,
+                Collections.singletonList(ex.getMessage())
+        );
         return new ResponseEntity<>(apiResponse, new HttpHeaders(), apiResponse.getStatus());
     }
 
@@ -49,19 +55,9 @@ public class GlobalExceptionHandler {
         ApiResponse apiResponse = new ApiResponse(
                 HttpStatus.NOT_FOUND.value(),
                 HttpStatus.NOT_FOUND,
-                ex.getMessage());
+                DATA_NOT_FOUND,
+                Collections.singletonList(ex.getMessage()));
         return new ResponseEntity<>(apiResponse, new HttpHeaders(), apiResponse.getStatus());
     }
-
-
-
-
-
-    private Map<String, List<String>> getErrorsMap(List<String> errors) {
-        Map<String, List<String>> errorResponse = new HashMap<>();
-        errorResponse.put("errors", errors);
-        return errorResponse;
-    }
-
 
 }

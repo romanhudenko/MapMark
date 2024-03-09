@@ -1,5 +1,6 @@
 package org.mapmark.service;
 
+import lombok.RequiredArgsConstructor;
 import org.mapmark.dto.GroupDTO;
 import org.mapmark.model.Group;
 import org.mapmark.repo.GroupRepository;
@@ -11,15 +12,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class GroupService {
 
     private final AuthFacadeImpl authFacade;
     private final GroupRepository groupRepository;
-
-    public GroupService(AuthFacadeImpl authFacade, GroupRepository groupRepository) {
-        this.authFacade = authFacade;
-        this.groupRepository = groupRepository;
-    }
 
 
     public List<Group> getGroups() {

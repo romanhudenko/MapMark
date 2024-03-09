@@ -1,6 +1,7 @@
 package org.mapmark.util;
 
 
+import lombok.RequiredArgsConstructor;
 import org.mapmark.model.Role;
 import org.mapmark.model.User;
 import org.mapmark.repo.RoleRepository;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 @Component
+@RequiredArgsConstructor
 public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 
 
@@ -22,12 +24,6 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
     private final RoleRepository roleRepository;
 
     private final PasswordEncoder passwordEncoder;
-
-    public DataLoader(RoleRepository roleRepository, PasswordEncoder passwordEncoder, UserRepository userRepository) {
-        this.roleRepository = roleRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.userRepository = userRepository;
-    }
 
     @Override
     @Transactional
