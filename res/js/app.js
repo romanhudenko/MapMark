@@ -189,7 +189,9 @@ function delete_mark_request(event) {
 function delete_editing_mark() {
     'use strict';
     debug('delete_editing_mark');
-    remove_mark(editing_mark);
+    if (window.confirm("Вы действительно хотите удалить метку?")) {
+        remove_mark(editing_mark);
+    }
 }
 
 function update_filter() {
