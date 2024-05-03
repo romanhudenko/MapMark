@@ -15,13 +15,14 @@ public class ApiResponse {
     private int code;
     private HttpStatus status;
     private String message;
+    private List<String> errors;
 
-
-    public ApiResponse(int code, HttpStatus status, String message) {
+    public ApiResponse(int code, HttpStatus status, String message, List<String> errors) {
         super();
         this.code = code;
         this.status = status;
         this.message = message;
+        this.errors = errors;
     }
 
 }

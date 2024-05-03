@@ -2,6 +2,7 @@ package org.mapmark.web;
 
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.mapmark.dto.GroupDTO;
 import org.mapmark.model.Group;
 import org.mapmark.service.GroupService;
@@ -14,13 +15,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/group")
+@RequiredArgsConstructor
 public class GroupController {
 
     private final GroupService groupService;
-
-    public GroupController(GroupService groupService) {
-        this.groupService = groupService;
-    }
 
 
     /**
@@ -62,9 +60,9 @@ public class GroupController {
      * @param markId mark UUID
      * @return Array of group entity
      */
-    @GetMapping("/in/{markId}")
-    public ResponseEntity<List<Group>> getGroupsByMarkId(@PathVariable String markId) {
-        return new ResponseEntity<>(groupService.getGroupsByMarkId(markId), HttpStatus.OK);
+    @GetMapping("/in/{uuid}")
+    public ResponseEntity<List<Group>> getGroupsByMarkId(@PathVariable String uuid) {
+        return new ResponseEntity<>(groupService.getGroupsByMarkId(uuid), HttpStatus.OK);
     }
 
 

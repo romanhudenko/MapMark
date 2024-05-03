@@ -10,16 +10,16 @@ import lombok.Data;
 public class MarkDTO {
 
 
-    @NotBlank(message = "Invalid Name: Empty name")
-    @NotNull(message = "Invalid Name: Name is NULL")
+    @NotBlank(message = "Invalid name: name is empty")
+    @NotNull(message = "Invalid name: name is NULL")
     private String name;
 
-    @DecimalMax(value = "90.000000", message = "Please Enter a valid Latitude")
-    @DecimalMin(value = "-90.000000", message = "Please Enter a valid Latitude")
+    @DecimalMax(value = "90.000000", message = "Please enter a valid latitude")
+    @DecimalMin(value = "-90.000000", message = "Please enter a valid latitude")
     private double latitude;
 
-    @DecimalMax(value = "180.000000", message = "Please Enter a valid Longitude")
-    @DecimalMin(value = "-180.000000", message = "Please Enter a valid Longitude")
+    @DecimalMax(value = "180.000000", message = "Please enter a valid longitude")
+    @DecimalMin(value = "-180.000000", message = "Please enter a valid longitude")
     private double longitude;
 
     @Size(min = 6, max = 6, message = "Wrong HEX code")

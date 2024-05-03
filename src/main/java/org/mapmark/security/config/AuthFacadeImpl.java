@@ -1,5 +1,6 @@
 package org.mapmark.security.config;
 
+import lombok.RequiredArgsConstructor;
 import org.mapmark.dto.LoginDTO;
 import org.mapmark.model.User;
 import org.mapmark.repo.UserRepository;
@@ -9,13 +10,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class AuthFacadeImpl implements AuthFacade {
 
     private final UserRepository userRepository;
 
-    public AuthFacadeImpl(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
 
     @Override
     public Authentication getAuthentication() {

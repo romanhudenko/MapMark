@@ -10,12 +10,11 @@ import lombok.Data;
 public class GroupDTO {
 
 
-    @NotBlank(message = "Invalid Name: Empty name")
-    @NotNull(message = "Invalid Name: Name is NULL")
+    @NotBlank(message = "Invalid name: name is empty")
+    @NotNull(message = "Invalid name: name is NULL")
     private String name;
 
     private String description;
-
 
     private String icon;
 

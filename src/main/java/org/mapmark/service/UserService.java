@@ -2,6 +2,7 @@ package org.mapmark.service;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import org.mapmark.dto.LoginDTO;
 import org.mapmark.dto.UserDTO;
 import org.mapmark.model.Role;
@@ -20,6 +21,7 @@ import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
 
 
@@ -28,16 +30,6 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final AuthFacadeImpl authFacade;
 
-
-    public UserService(UserRepository userRepository,
-                       RoleRepository roleRepository,
-                       PasswordEncoder passwordEncoder,
-                       AuthFacadeImpl authFacade) {
-        this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.authFacade = authFacade;
-    }
 
     public User createNewUser(UserDTO userDTO) {
         Role role = roleRepository.findByName("ROLE_USER").orElse(null);

@@ -1,8 +1,6 @@
 package org.mapmark.model;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -30,6 +28,7 @@ public class Group {
     @JsonIgnore
     private User user;
 
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     //todo default icon + think about format

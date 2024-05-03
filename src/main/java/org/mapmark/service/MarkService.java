@@ -1,5 +1,6 @@
 package org.mapmark.service;
 
+import lombok.RequiredArgsConstructor;
 import org.mapmark.dto.MarkDTO;
 import org.mapmark.model.Mark;
 import org.mapmark.model.User;
@@ -14,15 +15,12 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class MarkService {
 
     private final AuthFacadeImpl authFacade;
     private final MarkRepository markRepository;
 
-    public MarkService(AuthFacadeImpl authFacade, MarkRepository markRepository) {
-        this.authFacade = authFacade;
-        this.markRepository = markRepository;
-    }
 
     public List<Mark> getMarks() {
         return markRepository.findByUser_Username(authFacade.getUsername());
