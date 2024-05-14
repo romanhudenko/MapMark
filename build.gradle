@@ -13,6 +13,23 @@ repositories {
     jcenter()
 }
 
+task runApp(type: JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'org.mapmark.Main'
+}
+
+// Using and creating an Executable Jar
+jar {
+    manifest {
+        attributes('Main-Class': 'org.mapmark.Main')
+    }
+}
+
+task runExecutableJar(type: JavaExec) {
+    // Executable jars can have only _one_ jar on the classpath.
+    classpath = files(tasks.jar)
+}
+
 dependencies {
     implementation group: 'org.apache.httpcomponents.client5', name: 'httpclient5', version: '5.3.1'
 
