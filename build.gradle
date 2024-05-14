@@ -58,4 +58,11 @@ dependencies {
 
 test {
     useJUnitPlatform()
+    systemProperty 'selenide.headless', System.getProperty('selenide.headless')
+}
+
+task runTests (type: Test){
+    systemProperties['selenide.browser'] = 'chrome'
+    systemProperties['selenide.headless'] = 'true'
+    useJUnitPlatform()
 }
