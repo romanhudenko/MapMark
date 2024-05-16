@@ -53,6 +53,9 @@ function register() {
             },
             function() {
                 move_to_page('/app.html');
+            },
+            function() {
+                alert('Ошибка регистрации');
             }
         );
     }

@@ -31,7 +31,7 @@ function load_get(url, callback) {
     load(url, 'GET', null, callback);
 }
 
-function load_post_json(url, json_data, callback) {
+function load_post_json(url, json_data, callback, error_callback) {
     'use strict';
     $.ajax(
         {
@@ -40,7 +40,8 @@ function load_post_json(url, json_data, callback) {
             data: JSON.stringify(json_data),
             contentType: "application/json; charset=utf-8",
             traditional: true,
-            success: callback
+            success: callback,
+            error: error_callback
         }
     );
 }
