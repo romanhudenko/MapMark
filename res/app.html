@@ -22,10 +22,10 @@
         <div class="collapse navbar-collapse" id="navbarScroll">
           <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="#" data-bs-toggle="modal" data-bs-target="#marks_modal">Метки</a>
+              <a class="nav-link active" id="marks_menu_nav_a" aria-current="page" href="#" data-bs-toggle="modal" data-bs-target="#marks_modal">Метки</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="#" data-bs-toggle="modal" data-bs-target="#groups_modal">Группы меток</a>
+              <a class="nav-link active" id="marks_groups_menu_nav_a" aria-current="page" href="#" data-bs-toggle="modal" data-bs-target="#groups_modal">Группы меток</a>
             </li>
             <li id="show_all_marks_button" class="nav-item fade">
               <a class="nav-link" href="javascript:show_all_marks_request()" onсlick="show_all_marks_request();return false;">Показывать все метки</a>
@@ -79,7 +79,7 @@
               </table>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" onclick="start_mark_creation();">Добавить новую метку</button>
+                <button id="start_mark_creation_button" type="button" class="btn btn-primary" onclick="start_mark_creation();">Добавить новую метку</button>
             </div>
         </div>
       </div>
