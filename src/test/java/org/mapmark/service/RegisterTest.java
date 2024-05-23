@@ -36,6 +36,7 @@ public class RegisterTest {
         $("button[type=\"submit\"]").click();
         $("#logo").shouldBe(visible);
     }
+
     @Test
     public void existing_login_and_email() throws InterruptedException {
         $("#register_modal_open").click();
@@ -49,6 +50,7 @@ public class RegisterTest {
         Assertions.assertEquals(alert_text, "Ошибка регистрации");
         alert.accept();
     }
+
     @Test
     public void existing_login() throws InterruptedException {
         $("#register_modal_open").click();
@@ -62,6 +64,7 @@ public class RegisterTest {
         Assertions.assertEquals(alert_text, "Ошибка регистрации");
         alert.accept();
     }
+
     @Test
     public void existing_email() throws InterruptedException {
         $("#register_modal_open").click();
@@ -75,6 +78,7 @@ public class RegisterTest {
         Assertions.assertEquals(alert_text, "Ошибка регистрации");
         alert.accept();
     }
+
     @Test
     public void empty_login() throws InterruptedException {
         $("#register_modal_open").click();
@@ -87,6 +91,7 @@ public class RegisterTest {
         Assertions.assertEquals(alert_text, "Неправильный логин!\n");
         alert.accept();
     }
+
     @Test
     public void empty_email() throws InterruptedException {
         $("#register_modal_open").click();
@@ -99,6 +104,7 @@ public class RegisterTest {
         Assertions.assertEquals(alert_text, "Неправильный адрес почты!\n");
         alert.accept();
     }
+
     @Test
     public void empty_password() throws InterruptedException {
         $("#register_modal_open").click();
@@ -110,6 +116,7 @@ public class RegisterTest {
         Assertions.assertEquals(alert_text, "Неправильный пароль или пароли не совпадают!\n");
         alert.accept();
     }
+
     @Test
     public void different_passwords() throws InterruptedException {
         $("#register_modal_open").click();
@@ -123,6 +130,7 @@ public class RegisterTest {
         Assertions.assertEquals(alert_text, "Неправильный пароль или пароли не совпадают!\n");
         alert.accept();
     }
+
     @Test
     public void short_login() throws InterruptedException {
         $("#register_modal_open").click();
@@ -136,6 +144,7 @@ public class RegisterTest {
         Assertions.assertEquals(alert_text, "Неправильный логин!\n");
         alert.accept();
     }
+
     @Test
     public void long_login() throws InterruptedException {
         $("#register_modal_open").click();
@@ -149,6 +158,7 @@ public class RegisterTest {
         Assertions.assertEquals(alert_text, "Неправильный логин!\n");
         alert.accept();
     }
+
     @Test
     public void short_password() throws InterruptedException {
         $("#register_modal_open").click();
@@ -162,6 +172,7 @@ public class RegisterTest {
         Assertions.assertEquals(alert_text, "Неправильный пароль или пароли не совпадают!\n");
         alert.accept();
     }
+
     @Test
     public void long_password() throws InterruptedException {
         $("#register_modal_open").click();
@@ -175,6 +186,7 @@ public class RegisterTest {
         Assertions.assertEquals(alert_text, "Неправильный пароль или пароли не совпадают!\n");
         alert.accept();
     }
+
     @Test
     public void spacebars_passwords() throws InterruptedException {
         $("#register_modal_open").click();

@@ -80,4 +80,13 @@ public class AuthTest {
         $("button[type=\"submit\"]").click();
         $("#error_block").shouldBe(visible);
     }
+
+    @Test
+    public void logout() {
+        $("#username").sendKeys("user");
+        $("#password").sendKeys("user");
+        $("button[type=\"submit\"]").click();
+        $("#logout_button").click();
+        $("#greeter_h3").shouldBe(visible);
+    }
 }

@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bootstrap demo</title>
+    <title>Map Mark</title>
     <link href="/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <script src="https://api-maps.yandex.ru/2.1/?apikey=2869d110-481c-452f-b6de-b2b09d9abf6f&lang=ru_RU" type="text/javascript"></script>
     <link rel = "stylesheet" href = "https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/3.2.0/css/bootstrap-colorpicker.min.css"/>
@@ -33,7 +33,7 @@
           </ul>
           <form class="d-flex" role="search">
             <span id="username_place" class="navbar-text" style="padding-right: 10px;">Вы вошли как User</span>
-            <a class="btn btn-primary" href="/logout">Выход</a>
+            <a id="logout_button" class="btn btn-primary" href="/logout">Выход</a>
           </form>
         </div>
       </div>
@@ -55,7 +55,7 @@
               </table>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" onclick="start_group_creation();">Создать новую группу меток</button>
+                <button id="start_group_creation_button" type="button" class="btn btn-primary" onclick="start_group_creation();">Создать новую группу меток</button>
             </div>
         </div>
       </div>
@@ -180,7 +180,7 @@
               </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-success" onclick="create_new_group();">Создать</button>
+                <button id="create_new_group_button" type="button" class="btn btn-success" onclick="create_new_group();">Создать</button>
             </div>
         </div>
       </div>
