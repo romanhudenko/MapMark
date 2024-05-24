@@ -28,16 +28,13 @@ public class MarksGroupsTest {
     public void createGroup() throws InterruptedException {
         String name = "группа";
         $("#marks_groups_menu_nav_a").click();
-        Thread.sleep(100);
         $("#start_group_creation_button").click();
-        Thread.sleep(100);
         $("#group_name").sendKeys(name);
         $("#group_description").sendKeys("группа");
         $("#create_new_group_button").click();
         Thread.sleep(100);
         String id = "[data-id='" + executeJavaScript("return $(\"td:contains('" + name + "')\").parent().children(\"td.d-flex\")[0].lastChild.lastChild.getAttribute('data-id')") + "']";
         $(id).shouldBe(visible);
-        Thread.sleep(100);
         executeJavaScript("$(\"td:contains('" + name + "')\").parent().children(\"td.d-flex\")[0].lastChild.lastChild.click()");
         $(id).shouldNotBe(visible);
     }
@@ -46,16 +43,13 @@ public class MarksGroupsTest {
     public void createGroupLongName() throws InterruptedException {
         String name = "группа012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789";
         $("#marks_groups_menu_nav_a").click();
-        Thread.sleep(100);
         $("#start_group_creation_button").click();
-        Thread.sleep(100);
         $("#group_name").sendKeys(name);
         $("#group_description").sendKeys("группа");
         $("#create_new_group_button").click();
         Thread.sleep(100);
         String id = "[data-id='" + executeJavaScript("return $(\"td:contains('" + name + "')\").parent().children(\"td.d-flex\")[0].lastChild.lastChild.getAttribute('data-id')") + "']";
         $(id).shouldBe(visible);
-        Thread.sleep(100);
         executeJavaScript("$(\"td:contains('" + name + "')\").parent().children(\"td.d-flex\")[0].lastChild.lastChild.click()");
         $(id).shouldNotBe(visible);
     }
@@ -64,16 +58,13 @@ public class MarksGroupsTest {
     public void createGroupLongDescription() throws InterruptedException {
         String name = "группа";
         $("#marks_groups_menu_nav_a").click();
-        Thread.sleep(100);
         $("#start_group_creation_button").click();
-        Thread.sleep(100);
         $("#group_name").sendKeys(name);
         $("#group_description").sendKeys("группа012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789");
         $("#create_new_group_button").click();
         Thread.sleep(100);
         String id = "[data-id='" + executeJavaScript("return $(\"td:contains('" + name + "')\").parent().children(\"td.d-flex\")[0].lastChild.lastChild.getAttribute('data-id')") + "']";
         $(id).shouldBe(visible);
-        Thread.sleep(100);
         executeJavaScript("$(\"td:contains('" + name + "')\").parent().children(\"td.d-flex\")[0].lastChild.lastChild.click()");
         $(id).shouldNotBe(visible);
     }
@@ -82,16 +73,13 @@ public class MarksGroupsTest {
     public void createGroupWithSpaces() throws InterruptedException {
         String name = "гр у ппа";
         $("#marks_groups_menu_nav_a").click();
-        Thread.sleep(100);
         $("#start_group_creation_button").click();
-        Thread.sleep(100);
         $("#group_name").sendKeys(name);
         $("#group_description").sendKeys("группа");
         $("#create_new_group_button").click();
         Thread.sleep(100);
         String id = "[data-id='" + executeJavaScript("return $(\"td:contains('" + name + "')\").parent().children(\"td.d-flex\")[0].lastChild.lastChild.getAttribute('data-id')") + "']";
         $(id).shouldBe(visible);
-        Thread.sleep(100);
         executeJavaScript("$(\"td:contains('" + name + "')\").parent().children(\"td.d-flex\")[0].lastChild.lastChild.click()");
         $(id).shouldNotBe(visible);
     }
@@ -100,16 +88,13 @@ public class MarksGroupsTest {
     public void createGroupWithCaps() throws InterruptedException {
         String name = "груППа";
         $("#marks_groups_menu_nav_a").click();
-        Thread.sleep(100);
         $("#start_group_creation_button").click();
-        Thread.sleep(100);
         $("#group_name").sendKeys(name);
         $("#group_description").sendKeys("группа");
         $("#create_new_group_button").click();
         Thread.sleep(100);
         String id = "[data-id='" + executeJavaScript("return $(\"td:contains('" + name + "')\").parent().children(\"td.d-flex\")[0].lastChild.lastChild.getAttribute('data-id')") + "']";
         $(id).shouldBe(visible);
-        Thread.sleep(100);
         executeJavaScript("$(\"td:contains('" + name + "')\").parent().children(\"td.d-flex\")[0].lastChild.lastChild.click()");
         $(id).shouldNotBe(visible);
     }
@@ -118,34 +103,27 @@ public class MarksGroupsTest {
     public void createGroupWithSameName() throws InterruptedException {
         String name = "группа";
         $("#marks_groups_menu_nav_a").click();
-        Thread.sleep(100);
         $("#start_group_creation_button").click();
-        Thread.sleep(100);
         $("#group_name").sendKeys(name);
         $("#group_description").sendKeys("группа");
         $("#create_new_group_button").click();
-        Thread.sleep(100);
         $("#start_group_creation_button").click();
-        Thread.sleep(100);
         $("#group_name").sendKeys(name);
         $("#group_description").sendKeys("группа");
         $("#create_new_group_button").click();
         Thread.sleep(100);
         String id = "[data-id='" + executeJavaScript("return $(\"td:contains('" + name + "')\").parent().children(\"td.d-flex\")[0].lastChild.lastChild.getAttribute('data-id')") + "']";
         $(id).shouldBe(visible);
-        Thread.sleep(100);
         executeJavaScript("$(\"td:contains('" + name + "')\").parent().children(\"td.d-flex\")[0].lastChild.lastChild.click()");
         executeJavaScript("$(\"td:contains('" + name + "')\").parent().children(\"td.d-flex\")[0].lastChild.lastChild.click()");
         $(id).shouldNotBe(visible);
     }
 
     @Test
-    public void createGroupWithIllegalSymbols() throws InterruptedException {
+    public void createGroupWithIllegalSymbols() {
         String name = "г-р%у?п&п!а";
         $("#marks_groups_menu_nav_a").click();
-        Thread.sleep(100);
         $("#start_group_creation_button").click();
-        Thread.sleep(100);
         $("#group_name").sendKeys(name);
         $("#create_new_group_button").click();
         Alert alert = switchTo().alert();
@@ -154,11 +132,9 @@ public class MarksGroupsTest {
     }
 
     @Test
-    public void createGroupWithEmptyName() throws InterruptedException {
+    public void createGroupWithEmptyName() {
         $("#marks_groups_menu_nav_a").click();
-        Thread.sleep(100);
         $("#start_group_creation_button").click();
-        Thread.sleep(100);
         $("#create_new_group_button").click();
         Alert alert = switchTo().alert();
         String alert_text = alert.getText();
