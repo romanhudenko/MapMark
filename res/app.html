@@ -46,7 +46,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="groups_modal_label">Мои группы меток</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button id="groups_modal_close_button" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
               <table class="table">
@@ -208,9 +208,9 @@
               </form>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+              <button id="cancel_update_group_button" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
               <button type="button" class="btn btn-warning" onclick="edit_group_marks();">Редактировать метки группы</button>
-              <button type="button" class="btn btn-primary" onclick="update_group();">Принять</button>
+              <button id="update_group_button" type="button" class="btn btn-primary" onclick="update_group();">Принять</button>
             </div>
         </div>
       </div>
@@ -220,7 +220,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="group_marks_modal_label">Метки группы</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button id="group_marks_modal_close_button" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
               <table class="table">
@@ -232,7 +232,7 @@
               <div class="input-group">
                 <select class="form-select" id="add_mark_select" aria-label="Добавить метку в группу">
                 </select>
-                <button class="btn btn-outline-secondary" type="button" onclick="add_mark_to_group();">Добавить</button>
+                <button id="add_mark_to_group_button" class="btn btn-outline-secondary" type="button" onclick="add_mark_to_group();">Добавить</button>
               </div>
             </div>
         </div>

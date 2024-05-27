@@ -565,6 +565,7 @@ function add_group_mark(mark_data) {
     delete_but.appendChild(delete_i);
     delete_but.setAttribute('title', 'Удалить');
     delete_but.setAttribute('class', 'btn btn-danger');
+    delete_but.setAttribute('data-type', 'delete_mark_from_group');
     delete_but.setAttribute('type', 'button');
     delete_but.setAttribute('data-id', mark_data.id);
     delete_but.onclick = delete_mark_from_group_request;
